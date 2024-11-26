@@ -21,4 +21,19 @@ urlpatterns = [
     path('',views.fun1),
     path('f',views.f2),
     path('f3',views.f3),
+    path('f4/<d>',views.f4),
+    path('f4/<d>',views.f4),
+    path('f5',views.f5),
+    path('f6/<d>',views.f6),
+    path('f7',views.f7.as_view()),
+    path('f8/<d>',views.f8.as_view()),
+    path('f9',views.genericapiview.as_view()),
+    path('f10',views.udpate.as_view()),
+    
+    
+    
+    
+    
+    
+    
 ]

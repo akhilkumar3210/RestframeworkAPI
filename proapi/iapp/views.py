@@ -101,4 +101,51 @@ class f7(APIView):
             return JsonResponse(s.data,status=status.HTTP_201_CREATED)
         else:
             return JsonResponse(s.errors,status=status.HTTP_400_BAD_REQUEST)
-                    
+
+class f8(APIView):
+    def get(self,req,d):
+        try:
+            demo=Student.objects.get(pk=id)
+            s= model_serializer(demo)
+            return Response(s.data)
+        except Student.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        
+    def put(self,req,d):
+        try:
+            demo=Student.objects.get(pk=d)
+            s= model_serializer(demo,data=req.data)
+            if s.is_valid():
+                s.save()
+                return Response(s.data)
+            else:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+        except Student.DoesNotExist:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+    def delete(self,req,d):
+        try:
+            demo=Student.objects.get(pk=d)
+            demo.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Student.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        
+class genericapiview(generics.GenericAPIView,mixins.ListModelMixin,mixins.CreateModelMixin):
+    serializer_class= model_serializer
+    queryset=Student.objects.all()
+    def get(self,req):
+        return self.list(req)
+    def post(self,req):
+        return self.create(req)
+    
+    
+class udpate(generics.GenericAPIView,mixins.RetrieveModelMixin,mixins.UpdateModelMixin,mixins.DestroyModelMixin):
+    serializer_class= model_serializer
+    queryset=Student.objects.all()
+    lookup_field='id'
+    def get(self,req,id=None):
+        return self.retrieve(req)
+    def put(self,req,id=None):
+        return self.update(req,id)
+    def delete(self,req,id):
+        return self.destroy(req,id)        
